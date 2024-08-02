@@ -1,0 +1,16 @@
+---@class Water
+Water = {}
+
+---@param pressure Pascal
+---@return Celsius
+function Water.GetBoilingPoint( pressure )
+    local a, b, c
+    if pressure <= 101325 then
+        a, b, c = 8.07131, 1730.63, 233.426
+    else
+        a, b, c = 8.14019, 1810.94, 244.485
+    end
+
+    local pressureInMillimetersOfMercury = pressure / 133.32236842105
+    return b / ( a - math.log10( 133.32236842105 ) ) - c --[[@as Celsius]]
+end

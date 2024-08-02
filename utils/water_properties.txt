@@ -1,0 +1,45 @@
+local waterSpecificHeatCapacity = 4186 -- J/(kg*K)
+local waterLatentHeatOfVaporization = 2260000 -- J/kg
+local waterMolarMass = 0.01801528 -- kg/mol
+local idealGasConstant = 8.31446261815324 -- J/(mol*K)
+
+local kelvinTemperatureOffset = 273.15 -- C
+local millimiterOfMercuryToPascal = 133.32236842105 -- Pa
+
+--- Returns the pressure of steam for a given volume.
+--- @param steamMass number The mass of the steam in kg.
+--- @param steamTemperature number The temperature of the steam in celsius.
+--- @param volume number The volume of the steam in m^3.
+--- @return number pressure The pressure of the steam in pascals.
+local function getSteamPressureFromVolume( steamMass, steamTemperature, volume )
+    local molesOfSteam = steamMass / waterMolarMass
+    local steamTemperatureInKelvin = steamTemperature + kelvinTemperatureOffset
+
+    return ( molesOfSteam * idealGasConstant * steamTemperatureInKelvin ) / volume
+end
+
+--- Returns the boiling point of water at the given pressure.
+--- Based on the Antoine equation.
+--- @param pressure number The pressure in pascals.
+--- @return number temperature The boiling point of water in celsius.
+local function getBoilingPointAtPressure( pressure )
+    local a, b, c
+    if pressure <= 101325 then
+        a, b, c = 8.07131, 1730.63, 233.426
+    else
+        a, b, c = 8.14019, 1810.94, 244.485
+    end
+
+    local pressureInMillimetersOfMercury = pressure / millimiterOfMercuryToPascal
+    return b / ( a - math.log( pressureInMillimetersOfMercury, 10 ) ) - c
+end
+
+local water = {
+    specificHeatCapacity = waterSpecificHeatCapacity,
+    latentHeatOfVaporization = waterLatentHeatOfVaporization,
+    molarMass = waterMolarMass,
+    getSteamPressureFromVolume = getSteamPressureFromVolume,
+    getBoilingPointAtPressure = getBoilingPointAtPressure
+}
+
+return water

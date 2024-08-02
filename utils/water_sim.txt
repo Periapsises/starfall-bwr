@@ -1,0 +1,78 @@
+--@include water_properties.txt
+local water = require( "water_properties.txt" )
+local getSteamPressure = water.getSteamPressureFromVolume
+local getBoilingPoint = water.getBoilingPointAtPressure
+local waterSpecificHeatCapacity = water.specificHeatCapacity
+local waterLatentHeatOfVaporization = water.latentHeatOfVaporization
+
+local waterMass = 1000 -- Mass in kg
+local waterInitialTemperature = 90 -- Temperature in C
+local waterEnergy = waterMass * waterSpecificHeatCapacity * waterInitialTemperature -- Energy in J
+
+local steamMass = 0 -- Mass in kg
+local steamTemperature = 100 -- Temperature in C
+
+local containerHeight = 4 -- Height in m
+local containerWidth = 2 -- Width in m
+
+local containerHeightRatio = containerHeight / containerWidth
+
+local function getWaterHeightForArea( waterMass, area )
+    local waterVolume = waterMass / 1000 -- Volume in m^3
+    local waterHeight = waterVolume / area -- Height in m
+
+    return waterHeight
+end
+
+local f = string.format
+local utf8 = string.utf8char
+
+local function onRenderScreen()
+    local containerDisplayHeight = 128 * containerHeightRatio
+
+    local waterHeight = getWaterHeightForArea( waterMass, containerWidth * containerWidth )
+    local waterHeightRatio = waterHeight / containerHeight
+
+    render.setColor( Color( 50, 100, 255 ) )
+    local waterDisplayHeight = containerDisplayHeight * waterHeightRatio
+    render.drawRect( 16, 512 - waterDisplayHeight - 16, 128, waterDisplayHeight )
+
+    render.setColor( Color( 255, 255, 255 ) )
+
+    local waterTemperature = waterEnergy / ( waterMass * waterSpecificHeatCapacity )
+
+    render.drawText( 160, 512 - 32, f( "Water height: %0.2f m", waterHeight ) )
+    render.drawText( 160, 512 - 48, f( "Water Temperature: %0.1f %sC", waterTemperature, utf8( 176 ) ) )
+    render.drawText( 160, 512 - 64, f( "Water Energy: %0.1f kJ", waterEnergy / 1000 ) )
+    render.drawText( 160, 512 - 80, f( "Water Mass: %0.2f kg", waterMass ) )
+
+    local waterVolume = waterMass / 1000 -- Volume in m^3
+    local containerVolume = containerWidth * containerWidth * containerHeight
+    local steamVolume = containerVolume - waterVolume
+    local steamPressure = getSteamPressure( steamMass, steamTemperature, steamVolume )
+
+    waterEnergy = waterEnergy + 5000000 * timer.frametime()
+
+    local oneAtmosphere = 101325
+    local energyAtBoilingPoint = waterMass * waterSpecificHeatCapacity * getBoilingPoint( math.max( oneAtmosphere, steamPressure ) )
+    if waterEnergy > energyAtBoilingPoint and waterMass > 0 then
+        local excessEnergy = waterEnergy - energyAtBoilingPoint
+        local waterMassLost = math.min( excessEnergy / waterLatentHeatOfVaporization, waterMass )
+        waterEnergy = energyAtBoilingPoint
+        waterMass = waterMass - waterMassLost
+        steamMass = steamMass + waterMassLost
+    end
+
+    render.drawText( 160, 512 - 96, f( "Steam Pressure: %0.2f kPa", steamPressure / 1000 ) )
+    render.drawText( 160, 512 - 112, f( "Steam Mass: %0.2f kg", steamMass ) )
+
+    local steamTransparency = math.lerp( ( steamPressure / 1000000 ) ^ 2, 0, 150 )
+    render.setColor( Color( 255, 255, 255, steamTransparency ) )
+    local steamDisplayHeight = containerDisplayHeight * ( 1 - waterHeightRatio )
+    render.drawRect( 16, 512 - steamDisplayHeight - 16 - waterDisplayHeight, 128, steamDisplayHeight )
+
+    render.setColor( Color( 255, 255, 255 ) )
+    render.drawRectOutline( 16, 512 - containerDisplayHeight - 16, 128, containerDisplayHeight )
+end
+
+hook.add( "Render", "OnRenderScreen", onRenderScreen )

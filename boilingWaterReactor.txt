@@ -1,0 +1,82 @@
+--@name Boiling Water Reactor Simulator
+--@author Periapsis
+--@shared
+
+--@include fullCoreDisplay.txt
+--@include controlRodSelection.txt
+--@include textureUtilities.txt
+
+if SERVER then
+    wire.adjustInputs( { "Insert", "Withdraw", "ContInsert", "ContWithdraw" }, { "Entity", "Entity", "Entity", "Entity" } )
+    local insertButtonDown = false
+    local withdrawButtonDown = false
+    local contInsertButtonDown = false
+    local contWithdrawButtonDown = false
+
+    local function onUseInsertButton( pressed )
+        print( "Insert button: " .. tostring( pressed ) )
+    end
+
+    local function onUseWithdrawButton( pressed )
+        print( "Withdraw button: " .. tostring( pressed ) )
+    end
+
+    local function onUseContInsertButton( pressed )
+        print( "ContInsert button: " .. tostring( pressed ) )
+    end
+
+    local function onUseContWithdrawButton( pressed )
+        print( "ContWithdraw button: " .. tostring( pressed ) )
+    end
+
+    local function onUseButtons( ply, key, pressed )
+        if key ~= IN_KEY.USE then return end
+
+        local ent = ply:getEyeTrace().Entity
+        if not isValid( ent ) then return end
+
+        if ent == wire.ports.Insert and insertButtonDown ~= pressed then
+            insertButtonDown = pressed
+            onUseInsertButton( pressed )
+        elseif ent == wire.ports.Withdraw and withdrawButtonDown ~= pressed then
+            withdrawButtonDown = pressed
+            onUseWithdrawButton( pressed )
+        elseif ent == wire.ports.ContInsert and contInsertButtonDown ~= pressed then
+            contInsertButtonDown = pressed
+            onUseContInsertButton( pressed )
+        elseif ent == wire.ports.ContWithdraw and contWithdrawButtonDown ~= pressed then
+            contWithdrawButtonDown = pressed
+            onUseContWithdrawButton( pressed )
+        end
+    end
+
+    hook.add( "KeyPress", "OnUseButtons", function( ply, key ) onUseButtons( ply, key, true ) end )
+    hook.add( "KeyRelease", "OnUseButtons", function( ply, key ) onUseButtons( ply, key, false ) end )
+end
+
+if CLIENT then
+    require( "fullCoreDisplay.txt" )
+    require( "controlRodSelection.txt" )
+    require( "textureUtilities.txt" )
+
+    FullCoreDisplay.Model:setPos( chip():localToWorld( Vector( -62.8, 60.8, 74.25 ) ) )
+    FullCoreDisplay.Model:setAngles( chip():localToWorldAngles( Angle( 0, 45, 270 ) ) )
+    FullCoreDisplay.Model:setScale( Vector( 0.06, 0.06, 0.06 ) )
+
+    ControlRodSelection.Model:setPos( chip():localToWorld( Vector( -51.8, 52.2, 34 ) ) )
+    ControlRodSelection.Model:setAngles( chip():localToWorldAngles( Angle( 0, 45, 191.2 ) ) )
+    ControlRodSelection.Model:setScale( Vector( 0.9, 0.9, 0.9 ) )
+
+    TextureUtilities.Model:setPos( chip():localToWorld( Vector( 0, 0, 0 ) ) )
+
+    local function drawModels()
+        render.setFilterMag( TEXFILTER.POINT )
+        render.enableDepth( true )
+
+        FullCoreDisplay.Model:draw()
+        ControlRodSelection.Model:draw()
+        TextureUtilities.Model:draw()
+    end
+
+    hook.add( "PostDrawTranslucentRenderables", "DrawModels", drawModels )
+end

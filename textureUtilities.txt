@@ -1,0 +1,193 @@
+--@client
+
+local white = Color( 255, 255, 255 )
+local black = Color( 0, 0, 0 )
+
+render.createRenderTarget( "TextureUtilities" )
+local textureUtilitiesMaterial = material.create( "UnlitGeneric" )
+textureUtilitiesMaterial:setTextureRenderTarget( "$basetexture", "TextureUtilities" )
+
+TextureUtilities = {}
+TextureUtilities.Model = hologram.create( Vector(), Angle(), "models/hunter/blocks/cube025x025x025.mdl", Vector( 1, 1, 1 ) )
+TextureUtilities.Model:setNoDraw( true )
+
+---@class (exact) UVMap
+---@field u1 number
+---@field v1 number
+---@field u2 number
+---@field v2 number
+
+---@type UVMap[]
+local labels = {}
+
+local labelOffsetX = 0
+local labelOffsetY = 0
+local labelOffsetYMax = 0
+
+---@param w number
+---@param h number
+---@param text string|string[]
+---@param color Color
+local function addLabel( w, h, text, color )
+    if type( text ) == "string" then text = { text } end
+
+    labelOffsetYMax = math.max( labelOffsetYMax, h )
+
+    if labelOffsetX + w > 1024 then
+        labelOffsetX = 0
+        labelOffsetY = labelOffsetY + labelOffsetYMax
+
+        labelOffsetYMax = 0
+    end
+
+    render.setColor( color )
+    render.drawRect( labelOffsetX, labelOffsetY, w, h )
+
+    render.setColor( black )
+
+    local fontSize = 14
+    local hTotalHeight = #text * fontSize / 2
+
+    -- Draw text so it is centered in the middle of the rectangle using font height as a reference
+    -- (Two lines of text would be 1: h/2 - fontSize / 2, 2: h/2 + fontSize / 2)
+    for i, line in ipairs( text ) do
+        local x = labelOffsetX + w / 2
+        local y = labelOffsetY + h / 2 - hTotalHeight + ( i - 0.5 ) * fontSize
+
+        render.drawSimpleText( x, y, line, TEXT_ALIGN.CENTER, TEXT_ALIGN.CENTER )
+    end
+
+    local u1 = labelOffsetX / 1024
+    local v1 = labelOffsetY / 1024
+    local u2 = ( labelOffsetX + w ) / 1024
+    local v2 = ( labelOffsetY + h ) / 1024
+
+    labelOffsetX = labelOffsetX + w
+    if labelOffsetX >= 1024 then
+        labelOffsetX = 0
+        labelOffsetY = labelOffsetY + labelOffsetYMax
+
+        labelOffsetYMax = 0
+    end
+
+    return table.insert( labels, { u1 = u1, v1 = v1, u2 = u2, v2 = v2 } )
+end
+
+local verts = {}
+
+--- Adds a lebel to the vertices of the mesh
+local function createLabel( pos, ang, w, h, labelIndex )
+    local label = labels[labelIndex]
+
+    local u1, v1 = label.u1, label.v1
+    local u2, v2 = label.u2, label.v2
+
+    local offset1 = Vector( -w / 2, -h / 2, 0 )
+    local offset2 = Vector( w / 2, -h / 2, 0 )
+    local offset3 = Vector( w / 2, h / 2, 0 )
+    local offset4 = Vector( -w / 2, h / 2, 0 )
+
+    offset1:rotate( ang )
+    offset2:rotate( ang )
+    offset3:rotate( ang )
+    offset4:rotate( ang )
+
+    local vert1 = { pos = pos + offset1, u = u1, v = v1 }
+    local vert2 = { pos = pos + offset2, u = u2, v = v1 }
+    local vert3 = { pos = pos + offset3, u = u2, v = v2 }
+    local vert4 = { pos = pos + offset4, u = u1, v = v2 }
+
+    table.insert( verts, vert1 )
+    table.insert( verts, vert2 )
+    table.insert( verts, vert3 )
+    table.insert( verts, vert1 )
+    table.insert( verts, vert3 )
+    table.insert( verts, vert4 )
+end
+
+local function initializeTextureUtilities()
+    render.selectRenderTarget( "TextureUtilities" )
+
+    render.clear( Color( 255, 255, 255, 0 ) )
+
+    render.setFont( "ChatFont" )
+
+    -- SRM counts sliding indicator
+
+    -- SRM period sliding indicator
+
+    local srmA = addLabel( 128, 64, "SRM A", white )
+    local srmB = addLabel( 128, 64, "SRM B", white )
+    local srmC = addLabel( 128, 64, "SRM C", white )
+    local srmD = addLabel( 128, 64, "SRM D", white )
+
+    local srmAPeriod = addLabel( 128, 64, { "SRM A", "PERIOD" }, white )
+    local srmBPeriod = addLabel( 128, 64, { "SRM B", "PERIOD" }, white )
+    local srmCPeriod = addLabel( 128, 64, { "SRM C", "PERIOD" }, white )
+    local srmDPeriod = addLabel( 128, 64, { "SRM D", "PERIOD" }, white )
+
+    local orange = Color( 255, 165, 0 )
+
+    local contInsert = addLabel( 128, 128, { "CONTINUOUS", "INSERT" }, orange )
+    local contWithdraw = addLabel( 128, 128, { "CONTINUOUS", "WITHDRAW" }, orange )
+
+    local insert = addLabel( 128, 128, "INSERT", orange )
+    local withdraw = addLabel( 128, 128, "WITHDRAW", orange )
+
+    local test = addLabel( 128, 128, "TEST", orange )
+    local reset = addLabel( 128, 128, "RESET", orange )
+
+    local accTroubleAck = addLabel( 128, 128, { "ACCUMULATOR", "TROUBLE", "ACKNOWLEDGE" }, orange )
+
+    local time = addLabel( 192, 64, "TIME", white )
+    local pressure = addLabel( 192, 64, { "REACTOR", "PRESSURE" }, white )
+
+    local genMWE = addLabel( 192, 64, { "GENERATOR", "MWE" }, white )
+    local reactorThermalPower = addLabel( 192, 64, { "REACTOR THERMAL", "POWER MWTH" }, white )
+
+    local lprmLevel = addLabel( 192, 64, { "LPRM LEVEL" }, white )
+
+    local scramA1 = addLabel( 128, 64, { "REACTOR SCRAM", "A1" }, white )
+    local scramB1 = addLabel( 128, 64, { "REACTOR SCRAM", "B1" }, white )
+
+    local scramA2 = addLabel( 128, 64, { "REACTOR SCRAM", "A2" }, white )
+    local scramB2 = addLabel( 128, 64, { "REACTOR SCRAM", "B2" }, white )
+
+    render.selectRenderTarget()
+
+    createLabel( Vector( -90.6, 34.8, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmA )
+    createLabel( Vector( -88.8, 36.6, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmB )
+    createLabel( Vector( -87, 38.4, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmC )
+    createLabel( Vector( -85.2, 40.2, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmD )
+
+    createLabel( Vector( -82.6, 42.8, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmAPeriod )
+    createLabel( Vector( -80.8, 44.6, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmBPeriod )
+    createLabel( Vector( -79, 46.4, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmCPeriod )
+    createLabel( Vector( -77.2, 48.2, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmDPeriod )
+
+    createLabel( Vector( -57.5, 38, 33.1 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, contInsert )
+    createLabel( Vector( -55.8, 39.7, 33.1 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, contWithdraw )
+
+    createLabel( Vector( -39.7, 55.8, 33.1 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, insert )
+    createLabel( Vector( -38, 57.5, 33.1 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, withdraw )
+
+    createLabel( Vector( -61.5, 42, 34.3 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, test )
+    createLabel( Vector( -59.8, 43.7, 34.3 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, reset )
+
+    createLabel( Vector( -63.5, 44, 34.8 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, accTroubleAck )
+
+    createLabel( Vector( -88.3, 37.1, 73.2 ), Angle( 0, 45, 270 ), 3, 1, time )
+    createLabel( Vector( -79.7, 45.7, 73.2 ), Angle( 0, 45, 270 ), 3, 1, pressure )
+
+    createLabel( Vector( -45.7, 79.7, 73.2 ), Angle( 0, 45, 270 ), 3, 1, genMWE )
+    createLabel( Vector( -37.1, 88.3, 73.2 ), Angle( 0, 45, 270 ), 3, 1, reactorThermalPower )
+
+    local textureUtilitiesMesh = mesh.createFromTable( verts )
+
+    TextureUtilities.Model:setMaterial( "!" .. textureUtilitiesMaterial:getName() )
+    TextureUtilities.Model:setMesh( textureUtilitiesMesh )
+
+    hook.remove( "RenderOffScreen", "InitializeTextureUtilities" )
+end
+
+hook.add( "RenderOffScreen", "InitializeTextureUtilities", initializeTextureUtilities )

@@ -1,0 +1,60 @@
+--@client
+
+ControlRodSelection = {}
+
+render.createRenderTarget( "ControlRodSelection" )
+local controlRodSelectionMaterial = material.create( "UnlitGeneric" )
+controlRodSelectionMaterial:setTextureRenderTarget( "$basetexture", "ControlRodSelection" )
+
+local controlRodSelectionInitialized = false
+
+local white = Color( 255, 255, 255 )
+local black = Color( 0, 0, 0 )
+local deselectedColor = Color( 193, 191, 189 )
+local selectedColor = Color( 255, 255, 255 )
+
+local backgroundColor = Color( 255, 255, 255, 0 )
+
+local selectorSize = 52
+local selectorSpacing = 16
+
+ControlRodSelection.Model = hologram.create( Vector(), Angle(), "models/hunter/blocks/cube025x025x025.mdl", Vector( 1, 1, 1 ) )
+ControlRodSelection.Model:setNoDraw( true )
+
+local function initializeControlRodSelection()
+    if controlRodSelectionInitialized then return end
+    controlRodSelectionInitialized = true
+
+    render.selectRenderTarget( "ControlRodSelection" )
+
+    render.clear( backgroundColor )
+
+    render.setFont( "ChatFont" )
+
+    for _, rodData in ipairs( FullCoreDisplay.RodIndicators ) do
+        local x = rodData.Position.x * ( selectorSize + selectorSpacing )
+        local y = ( 14 - rodData.Position.y ) * ( selectorSize + selectorSpacing )
+
+        render.setColor( deselectedColor )
+        render.drawRect( x, y, selectorSize, selectorSize )
+
+        render.setColor( black )
+        render.drawSimpleText( x + selectorSize / 2, y + selectorSize / 2, rodData.Name, TEXT_ALIGN.CENTER, TEXT_ALIGN.CENTER )
+    end
+
+    render.selectRenderTarget()
+
+    local v1 = { pos = Vector( -10, -10, 0 ), u = 0, v = 0 }
+    local v2 = { pos = Vector( 10, -10, 0 ), u = 1, v = 0 }
+    local v3 = { pos = Vector( 10, 10, 0 ), u = 1, v = 1 }
+    local v4 = { pos = Vector( -10, 10, 0 ), u = 0, v = 1 }
+
+    local rodSelectionMesh = mesh.createFromTable( { v1, v2, v3, v1, v3, v4 } )
+
+    ControlRodSelection.Model:setMaterial( "!" .. controlRodSelectionMaterial:getName() )
+    ControlRodSelection.Model:setMesh( rodSelectionMesh )
+
+    hook.remove( "RenderOffScreen", "InitializeControlRodSelection" )
+end
+
+hook.add( "RenderOffScreen", "InitializeControlRodSelection", initializeControlRodSelection )

@@ -1,0 +1,14 @@
+---@class Steam
+Steam = {}
+
+--- Get the pressure of steam from its mass, temperature, and volume.
+--- @param steamMass Kilogram The mass of the steam in kg.
+--- @param steamTemperature Celsius The temperature of the steam in celsius.
+--- @param volume Volume The volume of the steam in m^3.
+--- @return Pascal The pressure of the steam in pascals.
+function Steam.GetPressure( steamMass, steamTemperature, volume )
+    local molesOfSteam = steamMass / 0.01801528
+    local steamTemperatureInKelvin = steamTemperature + 273.15
+
+    return ( molesOfSteam * 8.31446261815324 * steamTemperatureInKelvin ) / volume
+end

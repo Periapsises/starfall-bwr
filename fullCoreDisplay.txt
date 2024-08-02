@@ -1,0 +1,1464 @@
+--@client
+
+FullCoreDisplay = {}
+
+--- Activates the "Full In" indicator of the specified rod.
+---@param rodID string The ID of the rod to activate the indicator for.
+function FullCoreDisplay:setFullIn( rodID )
+end
+
+--- Deactivates the "Full In" indicator of the specified rod.
+---@param rodID string The ID of the rod to deactivate the indicator for.
+function FullCoreDisplay:clearFullIn( rodID )
+end
+
+--- Activates the "Full Out" indicator of the specified rod.
+---@param rodID string The ID of the rod to activate the indicator for.
+function FullCoreDisplay:setFullOut( rodID )
+end
+
+--- Deactivates the "Full Out" indicator of the specified rod.
+---@param rodID string The ID of the rod to deactivate the indicator for.
+function FullCoreDisplay:clearFullOut( rodID )
+end
+
+--- Activates the rod selection indicator of the specified rod.
+---@param rodID string The ID of the rod to activate the indicator for.
+function FullCoreDisplay:setSelected( rodID )
+end
+
+--- Deactivates the rod selection indicator of the specified rod.
+---@param rodID string The ID of the rod to deactivate the indicator for.
+function FullCoreDisplay:clearSelected( rodID )
+end
+
+--- Activates the "Drift" indicator of the specified rod.
+---@param rodID string The ID of the rod to activate the indicator for.
+function FullCoreDisplay:setDrift( rodID )
+end
+
+--- Deactivates the "Drift" indicator of the specified rod.
+---@param rodID string The ID of the rod to deactivate the indicator for.
+function FullCoreDisplay:clearDrift( rodID )
+end
+
+--- Activates the "Accum" indicator of the specified rod.
+---@param rodID string The ID of the rod to activate the indicator for.
+function FullCoreDisplay:setAccum( rodID )
+end
+
+--- Deactivates the "Accum" indicator of the specified rod.
+---@param rodID string The ID of the rod to deactivate the indicator for.
+function FullCoreDisplay:clearAccum( rodID )
+end
+
+--- Activates the "Scram" indicator of the specified rod.
+---@param rodID string The ID of the rod to activate the indicator for.
+function FullCoreDisplay:setScram( rodID )
+end
+
+--- Deactivates the "Scram" indicator of the specified rod.
+---@param rodID string The ID of the rod to deactivate the indicator for.
+function FullCoreDisplay:clearScram( rodID )
+end
+
+local rodIndicatorPositioning = {
+    TOP_LEFT = {
+        FullInIndicator     = { x = 1, y = 0, xOffset = 1, yOffset = 0 },
+        FullOutIndicator    = { x = 1, y = 1, xOffset = 1, yOffset = 0 },
+        SelectedIndicator   = { x = 0, y = 0, xOffset = 0, yOffset = 0 },
+        DriftIndicator      = { x = 0, y = 1, xOffset = 0, yOffset = 0 },
+        AccumIndicator      = { x = 0, y = 2, xOffset = 0, yOffset = 1 },
+        ScramIndicator      = { x = 0, y = 3, xOffset = 0, yOffset = 1 }
+    },
+    TOP_RIGHT = {
+        FullInIndicator     = { x = 0, y = 0, xOffset = 0, yOffset = 0 },
+        FullOutIndicator    = { x = 0, y = 1, xOffset = 0, yOffset = 0 },
+        SelectedIndicator   = { x = 1, y = 0, xOffset = 1, yOffset = 0 },
+        DriftIndicator      = { x = 1, y = 1, xOffset = 1, yOffset = 0 },
+        AccumIndicator      = { x = 1, y = 2, xOffset = 1, yOffset = 1 },
+        ScramIndicator      = { x = 1, y = 3, xOffset = 1, yOffset = 1 }
+    },
+    BOTTOM_LEFT = {
+        FullInIndicator     = { x = 1, y = 2, xOffset = 1, yOffset = 1 },
+        FullOutIndicator    = { x = 1, y = 3, xOffset = 1, yOffset = 1 },
+        SelectedIndicator   = { x = 0, y = 2, xOffset = 0, yOffset = 1 },
+        DriftIndicator      = { x = 0, y = 3, xOffset = 0, yOffset = 1 },
+        AccumIndicator      = { x = 0, y = 0, xOffset = 0, yOffset = 0 },
+        ScramIndicator      = { x = 0, y = 1, xOffset = 0, yOffset = 0 }
+    },
+    BOTTOM_RIGHT = {
+        FullInIndicator     = { x = 0, y = 2, xOffset = 0, yOffset = 1 },
+        FullOutIndicator    = { x = 0, y = 3, xOffset = 0, yOffset = 1 },
+        SelectedIndicator   = { x = 1, y = 2, xOffset = 1, yOffset = 1 },
+        DriftIndicator      = { x = 1, y = 3, xOffset = 1, yOffset = 1 },
+        AccumIndicator      = { x = 1, y = 0, xOffset = 1, yOffset = 0 },
+        ScramIndicator      = { x = 1, y = 1, xOffset = 1, yOffset = 0 }
+    }
+}
+
+FullCoreDisplay.RodIndicators = {
+    -- First column
+    {
+        Name = "02-19",
+        Position = { x = 0, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "02-23",
+        Position = { x = 0, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "02-27",
+        Position = { x = 0, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "02-31",
+        Position = { x = 0, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "02-35",
+        Position = { x = 0, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "02-39",
+        Position = { x = 0, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "02-43",
+        Position = { x = 0, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+
+    -- Second column
+    {
+        Name = "06-15",
+        Position = { x = 1, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "06-19",
+        Position = { x = 1, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "06-23",
+        Position = { x = 1, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "06-27",
+        Position = { x = 1, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "06-31",
+        Position = { x = 1, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "06-35",
+        Position = { x = 1, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "06-39",
+        Position = { x = 1, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "06-43",
+        Position = { x = 1, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "06-47",
+        Position = { x = 1, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+
+    -- Third column
+    {
+        Name = "10-11",
+        Position = { x = 2, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "10-15",
+        Position = { x = 2, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "10-19",
+        Position = { x = 2, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "10-23",
+        Position = { x = 2, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "10-27",
+        Position = { x = 2, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "10-31",
+        Position = { x = 2, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "10-35",
+        Position = { x = 2, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "10-39",
+        Position = { x = 2, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "10-43",
+        Position = { x = 2, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "10-47",
+        Position = { x = 2, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "10-51",
+        Position = { x = 2, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+
+    -- Fourth column
+    {
+        Name = "14-07",
+        Position = { x = 3, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "14-11",
+        Position = { x = 3, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "14-15",
+        Position = { x = 3, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "14-19",
+        Position = { x = 3, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "14-23",
+        Position = { x = 3, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "14-27",
+        Position = { x = 3, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "14-31",
+        Position = { x = 3, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "14-35",
+        Position = { x = 3, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "14-39",
+        Position = { x = 3, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "14-43",
+        Position = { x = 3, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "14-47",
+        Position = { x = 3, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "14-51",
+        Position = { x = 3, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "14-55",
+        Position = { x = 3, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+
+    -- Fifth column
+    {
+        Name = "18-03",
+        Position = { x = 4, y = 0 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "18-07",
+        Position = { x = 4, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "18-11",
+        Position = { x = 4, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "18-15",
+        Position = { x = 4, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "18-19",
+        Position = { x = 4, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "18-23",
+        Position = { x = 4, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "18-27",
+        Position = { x = 4, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "18-31",
+        Position = { x = 4, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "18-35",
+        Position = { x = 4, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "18-39",
+        Position = { x = 4, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "18-43",
+        Position = { x = 4, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "18-47",
+        Position = { x = 4, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "18-51",
+        Position = { x = 4, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "18-55",
+        Position = { x = 4, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "18-59",
+        Position = { x = 4, y = 14 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+
+    -- Sixth column
+    {
+        Name = "22-03",
+        Position = { x = 5, y = 0 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "22-07",
+        Position = { x = 5, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "22-11",
+        Position = { x = 5, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "22-15",
+        Position = { x = 5, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "22-19",
+        Position = { x = 5, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "22-23",
+        Position = { x = 5, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "22-27",
+        Position = { x = 5, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "22-31",
+        Position = { x = 5, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "22-35",
+        Position = { x = 5, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "22-39",
+        Position = { x = 5, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "22-43",
+        Position = { x = 5, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "22-47",
+        Position = { x = 5, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "22-51",
+        Position = { x = 5, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "22-55",
+        Position = { x = 5, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "22-59",
+        Position = { x = 5, y = 14 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+
+    -- Seventh column
+    {
+        Name = "26-03",
+        Position = { x = 6, y = 0 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "26-07",
+        Position = { x = 6, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "26-11",
+        Position = { x = 6, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "26-15",
+        Position = { x = 6, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "26-19",
+        Position = { x = 6, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "26-23",
+        Position = { x = 6, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "26-27",
+        Position = { x = 6, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "26-31",
+        Position = { x = 6, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "26-35",
+        Position = { x = 6, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "26-39",
+        Position = { x = 6, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "26-43",
+        Position = { x = 6, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "26-47",
+        Position = { x = 6, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "26-51",
+        Position = { x = 6, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "26-55",
+        Position = { x = 6, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "26-59",
+        Position = { x = 6, y = 14 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+
+    -- Eighth column
+    {
+        Name = "30-03",
+        Position = { x = 7, y = 0 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "30-07",
+        Position = { x = 7, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "30-11",
+        Position = { x = 7, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "30-15",
+        Position = { x = 7, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "30-19",
+        Position = { x = 7, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "30-23",
+        Position = { x = 7, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "30-27",
+        Position = { x = 7, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "30-31",
+        Position = { x = 7, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "30-35",
+        Position = { x = 7, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "30-39",
+        Position = { x = 7, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "30-43",
+        Position = { x = 7, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "30-47",
+        Position = { x = 7, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "30-51",
+        Position = { x = 7, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "30-55",
+        Position = { x = 7, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "30-59",
+        Position = { x = 7, y = 14 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+
+    -- Ninth column
+    {
+        Name = "34-03",
+        Position = { x = 8, y = 0 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "34-07",
+        Position = { x = 8, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "34-11",
+        Position = { x = 8, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "34-15",
+        Position = { x = 8, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "34-19",
+        Position = { x = 8, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "34-23",
+        Position = { x = 8, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "34-27",
+        Position = { x = 8, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "34-31",
+        Position = { x = 8, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "34-35",
+        Position = { x = 8, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "34-39",
+        Position = { x = 8, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "34-43",
+        Position = { x = 8, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "34-47",
+        Position = { x = 8, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "34-51",
+        Position = { x = 8, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "34-55",
+        Position = { x = 8, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "34-59",
+        Position = { x = 8, y = 14 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+
+    -- Tenth column
+    {
+        Name = "38-03",
+        Position = { x = 9, y = 0 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "38-07",
+        Position = { x = 9, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "38-11",
+        Position = { x = 9, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "38-15",
+        Position = { x = 9, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "38-19",
+        Position = { x = 9, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "38-23",
+        Position = { x = 9, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "38-27",
+        Position = { x = 9, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "38-31",
+        Position = { x = 9, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "38-35",
+        Position = { x = 9, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "38-39",
+        Position = { x = 9, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "38-43",
+        Position = { x = 9, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "38-47",
+        Position = { x = 9, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "38-51",
+        Position = { x = 9, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "38-55",
+        Position = { x = 9, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "38-59",
+        Position = { x = 9, y = 14 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+
+    -- Eleventh column
+    {
+        Name = "42-03",
+        Position = { x = 10, y = 0 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "42-07",
+        Position = { x = 10, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "42-11",
+        Position = { x = 10, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "42-15",
+        Position = { x = 10, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "42-19",
+        Position = { x = 10, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "42-23",
+        Position = { x = 10, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "42-27",
+        Position = { x = 10, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "42-31",
+        Position = { x = 10, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "42-35",
+        Position = { x = 10, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "42-39",
+        Position = { x = 10, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "42-43",
+        Position = { x = 10, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "42-47",
+        Position = { x = 10, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "42-51",
+        Position = { x = 10, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "42-55",
+        Position = { x = 10, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "42-59",
+        Position = { x = 10, y = 14 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+
+    -- Twelfth column
+    {
+        Name = "46-07",
+        Position = { x = 11, y = 1 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "46-11",
+        Position = { x = 11, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "46-15",
+        Position = { x = 11, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "46-19",
+        Position = { x = 11, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "46-23",
+        Position = { x = 11, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "46-27",
+        Position = { x = 11, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "46-31",
+        Position = { x = 11, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "46-35",
+        Position = { x = 11, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "46-39",
+        Position = { x = 11, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "46-43",
+        Position = { x = 11, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "46-47",
+        Position = { x = 11, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "46-51",
+        Position = { x = 11, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "46-55",
+        Position = { x = 11, y = 13 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+
+    -- Thirteenth column
+    {
+        Name = "50-11",
+        Position = { x = 12, y = 2 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "50-15",
+        Position = { x = 12, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "50-19",
+        Position = { x = 12, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "50-23",
+        Position = { x = 12, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "50-27",
+        Position = { x = 12, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "50-31",
+        Position = { x = 12, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "50-35",
+        Position = { x = 12, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "50-39",
+        Position = { x = 12, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "50-43",
+        Position = { x = 12, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "50-47",
+        Position = { x = 12, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "50-51",
+        Position = { x = 12, y = 12 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+
+    -- Fourteenth column
+    {
+        Name = "54-15",
+        Position = { x = 13, y = 3 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "54-19",
+        Position = { x = 13, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "54-23",
+        Position = { x = 13, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "54-27",
+        Position = { x = 13, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "54-31",
+        Position = { x = 13, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "54-35",
+        Position = { x = 13, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "54-39",
+        Position = { x = 13, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+    {
+        Name = "54-43",
+        Position = { x = 13, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_LEFT
+    },
+    {
+        Name = "54-47",
+        Position = { x = 13, y = 11 },
+        Positioning = rodIndicatorPositioning.BOTTOM_LEFT
+    },
+
+    -- Fifteenth column
+    {
+        Name = "58-19",
+        Position = { x = 14, y = 4 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "58-23",
+        Position = { x = 14, y = 5 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "58-27",
+        Position = { x = 14, y = 6 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "58-31",
+        Position = { x = 14, y = 7 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "58-35",
+        Position = { x = 14, y = 8 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+    {
+        Name = "58-39",
+        Position = { x = 14, y = 9 },
+        Positioning = rodIndicatorPositioning.BOTTOM_RIGHT
+    },
+    {
+        Name = "58-43",
+        Position = { x = 14, y = 10 },
+        Positioning = rodIndicatorPositioning.TOP_RIGHT
+    },
+}
+
+FullCoreDisplay.LPRMIndicators = {
+    -- First row
+    {
+        Position = { x = 1, y = 0 }
+    },
+    {
+        Position = { x = 2, y = 0 }
+    },
+    {
+        Position = { x = 3, y = 0 }
+    },
+    {
+        Position = { x = 4, y = 0 }
+    },
+    {
+        Position = { x = 5, y = 0 }
+    },
+
+    -- Second row
+    {
+        Position = { x = 0, y = 1 }
+    },
+    {
+        Position = { x = 1, y = 1 }
+    },
+    {
+        Position = { x = 2, y = 1 }
+    },
+    {
+        Position = { x = 3, y = 1 }
+    },
+    {
+        Position = { x = 4, y = 1 }
+    },
+    {
+        Position = { x = 5, y = 1 }
+    },
+    {
+        Position = { x = 6, y = 1 }
+    },
+
+    -- Third row
+    {
+        Position = { x = 0, y = 2 }
+    },
+    {
+        Position = { x = 1, y = 2 }
+    },
+    {
+        Position = { x = 2, y = 2 }
+    },
+    {
+        Position = { x = 3, y = 2 }
+    },
+    {
+        Position = { x = 4, y = 2 }
+    },
+    {
+        Position = { x = 5, y = 2 }
+    },
+    {
+        Position = { x = 6, y = 2 }
+    },
+
+    -- Fourth row
+    {
+        Position = { x = 0, y = 3 }
+    },
+    {
+        Position = { x = 1, y = 3 }
+    },
+    {
+        Position = { x = 2, y = 3 }
+    },
+    {
+        Position = { x = 3, y = 3 }
+    },
+    {
+        Position = { x = 4, y = 3 }
+    },
+    {
+        Position = { x = 5, y = 3 }
+    },
+    {
+        Position = { x = 6, y = 3 }
+    },
+
+    -- Fifth row
+    {
+        Position = { x = 0, y = 4 }
+    },
+    {
+        Position = { x = 1, y = 4 }
+    },
+    {
+        Position = { x = 2, y = 4 }
+    },
+    {
+        Position = { x = 3, y = 4 }
+    },
+    {
+        Position = { x = 4, y = 4 }
+    },
+    {
+        Position = { x = 5, y = 4 }
+    },
+    {
+        Position = { x = 6, y = 4 }
+    },
+
+    -- Sixth row
+    {
+        Position = { x = 0, y = 5 }
+    },
+    {
+        Position = { x = 1, y = 5 }
+    },
+    {
+        Position = { x = 2, y = 5 }
+    },
+    {
+        Position = { x = 3, y = 5 }
+    },
+    {
+        Position = { x = 4, y = 5 }
+    },
+    {
+        Position = { x = 5, y = 5 }
+    },
+
+    -- Seventh row
+    {
+        Position = { x = 1, y = 6 }
+    },
+    {
+        Position = { x = 2, y = 6 }
+    },
+    {
+        Position = { x = 3, y = 6 }
+    },
+    {
+        Position = { x = 4, y = 6 }
+    }
+}
+
+local white = Color( 255, 255, 255 )
+local black = Color( 0, 0, 0 )
+
+local inactiveColor = Color( 180, 184, 192 )
+local fullInColor = Color( 179, 255, 191 )
+local fullOutColor = Color( 255, 179, 179 )
+local lprmOffColor = Color( 33, 36, 38 )
+local lprmOnColor = Color( 191, 107, 39 )
+local accumColor = Color( 255, 0, 0 )
+local driftColor = Color( 255, 255, 0 )
+local scramColor = Color( 0, 0, 255 )
+
+local backgroundColor = Color( 31, 31, 25 )
+
+render.createRenderTarget( "FullCoreDisplay" )
+local fullCoreDisplayMaterial = material.create( "UnlitGeneric" )
+fullCoreDisplayMaterial:setTextureRenderTarget( "$basetexture", "FullCoreDisplay" )
+
+local fullCoreDisplayTextureInitialized = false
+
+local indicatorTextureWidth = 64
+local indicatorTextureHeight = 32
+
+local function initializeFullCoreDisplayTexture()
+    if fullCoreDisplayTextureInitialized then return end
+    fullCoreDisplayTextureInitialized = true
+
+    render.selectRenderTarget( "FullCoreDisplay" )
+
+    local xOffset = 0
+    local yOffset = 0
+
+    local function drawIndicator( color, text, text2 )
+        render.setColor( color )
+        render.drawRect( xOffset, yOffset, indicatorTextureWidth, indicatorTextureHeight )
+
+        render.setColor( black )
+
+        if text2 then
+            render.drawSimpleText( xOffset + indicatorTextureWidth / 2, yOffset + indicatorTextureHeight * 0.3, text, TEXT_ALIGN.CENTER, TEXT_ALIGN.CENTER )
+            render.drawSimpleText( xOffset + indicatorTextureWidth / 2, yOffset + indicatorTextureHeight * 0.7, text2, TEXT_ALIGN.CENTER, TEXT_ALIGN.CENTER )
+        else
+            render.drawSimpleText( xOffset + indicatorTextureWidth / 2, yOffset + indicatorTextureHeight / 2, text, TEXT_ALIGN.CENTER, TEXT_ALIGN.CENTER )
+        end
+
+        xOffset = xOffset + indicatorTextureWidth
+        if xOffset > 1024 - indicatorTextureWidth then
+            xOffset = 0
+            yOffset = yOffset + indicatorTextureHeight
+        end
+    end
+
+    for _, rodData in pairs( FullCoreDisplay.RodIndicators ) do
+        drawIndicator( inactiveColor, rodData.Name )
+        drawIndicator( white, rodData.Name )
+    end
+
+    drawIndicator( inactiveColor, "FULL", "IN" )
+    drawIndicator( fullInColor, "FULL", "IN" )
+    drawIndicator( inactiveColor, "FULL", "OUT" )
+    drawIndicator( fullOutColor, "FULL", "OUT" )
+
+    drawIndicator( inactiveColor, "ACCUM" )
+    drawIndicator( accumColor, "ACCUM" )
+    drawIndicator( inactiveColor, "DRIFT" )
+    drawIndicator( driftColor, "DRIFT" )
+    drawIndicator( inactiveColor, "SCRAM" )
+    drawIndicator( scramColor, "SCRAM" )
+
+    drawIndicator( lprmOffColor, "LPRM A", "DOWN" )
+    drawIndicator( lprmOffColor, "LPRM B", "DOWN" )
+    drawIndicator( lprmOffColor, "LPRM C", "DOWN" )
+    drawIndicator( lprmOffColor, "LPRM D", "DOWN" )
+
+    drawIndicator( lprmOnColor, "LPRM A", "DOWN" )
+    drawIndicator( lprmOnColor, "LPRM B", "DOWN" )
+    drawIndicator( lprmOnColor, "LPRM C", "DOWN" )
+    drawIndicator( lprmOnColor, "LPRM D", "DOWN" )
+
+    drawIndicator( lprmOffColor, "LPRM A", "UP" )
+    drawIndicator( lprmOffColor, "LPRM B", "UP" )
+    drawIndicator( lprmOffColor, "LPRM C", "UP" )
+    drawIndicator( lprmOffColor, "LPRM D", "UP" )
+
+    drawIndicator( lprmOnColor, "LPRM A", "UP" )
+    drawIndicator( lprmOnColor, "LPRM B", "UP" )
+    drawIndicator( lprmOnColor, "LPRM C", "UP" )
+    drawIndicator( lprmOnColor, "LPRM D", "UP" )
+
+    render.selectRenderTarget()
+end
+
+local fullCoreDisplayMesh
+local fullCoreDisplayMeshInitialized = false
+
+local indicatorWidth = 16
+local indicatorHeight = 8
+local indicatorSpacing = 1
+
+local indicatorGroupSize = ( indicatorWidth + indicatorSpacing ) * 2
+
+local sIndicatorIndex = #FullCoreDisplay.RodIndicators * 2 + 1
+
+local function initializeFullCoreDisplayMesh()
+    if fullCoreDisplayMeshInitialized then return end
+    fullCoreDisplayMeshInitialized = true
+
+    local vertices = {}
+
+    local function insertVerts( v1, v2, v3, v4 )
+        table.insert( vertices, v1 )
+        table.insert( vertices, v2 )
+        table.insert( vertices, v3 )
+
+        table.insert( vertices, v3 )
+        table.insert( vertices, v4 )
+        table.insert( vertices, v1 )
+    end
+
+    local indicatorsPerRow = 1024 / indicatorTextureWidth
+    local indicatorsPerColumn = 1024 / indicatorTextureHeight
+
+    local function setVertexUV( v1, v2, v3, v4, indicatorIndex )
+        local U1 = ( indicatorIndex - 1 ) % indicatorsPerRow
+        local V1 = math.floor( ( indicatorIndex - 1 ) / indicatorsPerRow )
+        local U2 = U1 + 1
+        local V2 = V1 + 1
+
+        v1.u = U1 / indicatorsPerRow
+        v1.v = V1 / indicatorsPerColumn
+
+        v2.u = U2 / indicatorsPerRow
+        v2.v = V1 / indicatorsPerColumn
+
+        v3.u = U2 / indicatorsPerRow
+        v3.v = V2 / indicatorsPerColumn
+
+        v4.u = U1 / indicatorsPerRow
+        v4.v = V2 / indicatorsPerColumn
+    end
+
+    local function getRodIndicatorVerts( x, y, indicatorPositioning )
+        local xOffset = indicatorPositioning.x * indicatorWidth + indicatorPositioning.xOffset * indicatorSpacing
+        local yOffset = indicatorPositioning.y * indicatorHeight + indicatorPositioning.yOffset * indicatorSpacing
+
+        local v1 = { pos = Vector( x + xOffset, y + yOffset, 0 ) }
+        local v2 = { pos = Vector( x + xOffset + indicatorWidth, y + yOffset, 0 ) }
+        local v3 = { pos = Vector( x + xOffset + indicatorWidth, y + yOffset + indicatorHeight, 0 ) }
+        local v4 = { pos = Vector( x + xOffset, y + yOffset + indicatorHeight, 0 ) }
+
+        return v1, v2, v3, v4
+    end
+
+    local function drawRodDisplayData( index, displayData )
+        local x = ( -7 + displayData.Position.x ) * indicatorGroupSize
+        local y = ( 7 - displayData.Position.y ) * indicatorGroupSize
+
+        local v1, v2, v3, v4
+
+        v1, v2, v3, v4 = getRodIndicatorVerts( x, y, displayData.Positioning.FullInIndicator )
+        insertVerts( v1, v2, v3, v4 )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 1 )
+
+        v1, v2, v3, v4 = getRodIndicatorVerts( x, y, displayData.Positioning.FullOutIndicator )
+        insertVerts( v1, v2, v3, v4 )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 2 )
+
+        v1, v2, v3, v4 = getRodIndicatorVerts( x, y, displayData.Positioning.SelectedIndicator )
+        setVertexUV( v1, v2, v3, v4, ( index * 2 ) - 1 )
+        insertVerts( v1, v2, v3, v4 )
+
+        v1, v2, v3, v4 = getRodIndicatorVerts( x, y, displayData.Positioning.DriftIndicator )
+        insertVerts( v1, v2, v3, v4 )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 6 )
+
+        v1, v2, v3, v4 = getRodIndicatorVerts( x, y, displayData.Positioning.AccumIndicator )
+        insertVerts( v1, v2, v3, v4 )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 4 )
+
+        v1, v2, v3, v4 = getRodIndicatorVerts( x, y, displayData.Positioning.ScramIndicator )
+        insertVerts( v1, v2, v3, v4 )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 8 )
+
+    end
+
+    -- LPRM Indicators start on the bottom left corner after three rod indicators and are spaced with two rod indicators.
+
+    local lprmIndicatorOffset = ( indicatorWidth + indicatorSpacing ) * 3
+    local lprmIndicatorGroupSize = ( indicatorWidth + indicatorSpacing ) * 4
+
+    local function getLPRMIndicatorVerts( x, y )
+        local v1 = { pos = Vector( x, y, 0 ) }
+        local v2 = { pos = Vector( x + indicatorWidth, y, 0 ) }
+        local v3 = { pos = Vector( x + indicatorWidth, y + indicatorHeight, 0 ) }
+        local v4 = { pos = Vector( x, y + indicatorHeight, 0 ) }
+
+        return v1, v2, v3, v4
+    end
+
+    local function drawLPRMDisplayData( displayData )
+        local x = ( -3.5 + displayData.Position.x ) * lprmIndicatorGroupSize + lprmIndicatorOffset
+        local y = ( 3.5 - displayData.Position.y ) * lprmIndicatorGroupSize - lprmIndicatorOffset
+
+        local v1, v2, v3, v4
+
+        v1, v2, v3, v4 = getLPRMIndicatorVerts( x, y )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 17 )
+        insertVerts( v1, v2, v3, v4 )
+
+        v1, v2, v3, v4 = getLPRMIndicatorVerts( x, y + indicatorHeight )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 16 )
+        insertVerts( v1, v2, v3, v4 )
+
+        v1, v2, v3, v4 = getLPRMIndicatorVerts( x, y + indicatorHeight * 2 + indicatorSpacing )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 15 )
+        insertVerts( v1, v2, v3, v4 )
+
+        v1, v2, v3, v4 = getLPRMIndicatorVerts( x, y + indicatorHeight * 3 + indicatorSpacing )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 14 )
+        insertVerts( v1, v2, v3, v4 )
+
+        v1, v2, v3, v4 = getLPRMIndicatorVerts( x + indicatorWidth + indicatorSpacing, y )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 21 )
+        insertVerts( v1, v2, v3, v4 )
+
+        v1, v2, v3, v4 = getLPRMIndicatorVerts( x + indicatorWidth + indicatorSpacing, y + indicatorHeight )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 20 )
+        insertVerts( v1, v2, v3, v4 )
+
+        v1, v2, v3, v4 = getLPRMIndicatorVerts( x + indicatorWidth + indicatorSpacing, y + indicatorHeight * 2 + indicatorSpacing )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 19 )
+        insertVerts( v1, v2, v3, v4 )
+
+        v1, v2, v3, v4 = getLPRMIndicatorVerts( x + indicatorWidth + indicatorSpacing, y + indicatorHeight * 3 + indicatorSpacing )
+        setVertexUV( v1, v2, v3, v4, sIndicatorIndex + 18 )
+        insertVerts( v1, v2, v3, v4 )
+    end
+
+    for index, rodDisplayData in ipairs( FullCoreDisplay.RodIndicators ) do
+        drawRodDisplayData( index, rodDisplayData )
+    end
+
+    for _, lprmDisplayData in ipairs( FullCoreDisplay.LPRMIndicators ) do
+        drawLPRMDisplayData( lprmDisplayData )
+    end
+
+    fullCoreDisplayMesh = mesh.createFromTable( vertices )
+end
+
+FullCoreDisplay.Model = hologram.create( Vector(), Angle(), "models/hunter/blocks/cube025x025x025.mdl", Vector( 1, 1, 1 ) )
+FullCoreDisplay.Model:setNoDraw( true )
+
+local function initializeFullCoreDisplay()
+    initializeFullCoreDisplayTexture()
+    initializeFullCoreDisplayMesh()
+
+    FullCoreDisplay.Model:setMaterial( "!" .. fullCoreDisplayMaterial:getName() )
+    FullCoreDisplay.Model:setMesh( fullCoreDisplayMesh )
+
+    hook.remove( "RenderOffScreen", "InitializeFullCoreDisplay" )
+end
+
+hook.add( "RenderOffScreen", "InitializeFullCoreDisplay", initializeFullCoreDisplay )
