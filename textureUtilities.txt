@@ -75,7 +75,7 @@ end
 
 local verts = {}
 
---- Adds a lebel to the vertices of the mesh
+--- Adds a label to the vertices of the mesh
 local function createLabel( pos, ang, w, h, labelIndex )
     local label = labels[labelIndex]
 

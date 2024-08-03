@@ -1,0 +1,95 @@
+--@name Seven Segment Display
+--@author Claydo9 / Periapsis(Periapsises)
+--@client
+
+SevenSegmentDisplay = {}
+
+SevenSegmentDisplay.ColorSchemes = {
+    ["Red"] = { 
+        [true] = Color( 200, 0, 0 ),
+        [false] = Color( 50, 0, 0 ), 
+        ["BgColor"] = Color( 33, 12, 12 ) 
+    },
+    ["Green"] = { 
+        [true] = Color( 0, 200, 0 ),
+        [false] = Color( 0, 50, 0 ), 
+        ["BgColor"] = Color( 20, 28, 20 ) 
+    },
+    ["Orange"] = { 
+        [true] = Color( 255, 140, 0 ),
+        [false] = Color( 54, 28, 0 ), 
+        ["BgColor"] = Color( 31, 24, 16 ) 
+    }
+}
+
+local segmentSizePercentage = 10
+
+local segmentMap = {
+    [0] = {
+        ["A"] = true, ["B"] = true, ["C"] = true, ["D"] = true, ["E"] = true, ["F"] = true, ["G"] = false
+    },
+    [1] = {
+        ["A"] = false, ["B"] = true, ["C"] = true, ["D"] = false, ["E"] = false, ["F"] = false, ["G"] = false
+    },
+    [2] = {
+        ["A"] = true, ["B"] = true, ["C"] = false, ["D"] = true, ["E"] = true, ["F"] = false, ["G"] = true
+    },
+    [3] = {
+        ["A"] = true, ["B"] = true, ["C"] = true, ["D"] = true, ["E"] = false, ["F"] = false, ["G"] = true
+    },
+    [4] = {
+        ["A"] = false, ["B"] = true, ["C"] = true, ["D"] = false, ["E"] = false, ["F"] = true, ["G"] = true
+    },
+    [5] = {
+        ["A"] = true, ["B"] = false, ["C"] = true, ["D"] = true, ["E"] = false, ["F"] = true, ["G"] = true
+    },
+    [6] = {
+        ["A"] = true, ["B"] = false, ["C"] = true, ["D"] = true, ["E"] = true, ["F"] = true, ["G"] = true
+    },
+    [7] = {
+        ["A"] = true, ["B"] = true, ["C"] = true, ["D"] = false, ["E"] = false, ["F"] = false, ["G"] = false
+    },
+    [8] = {
+        ["A"] = true, ["B"] = true, ["C"] = true, ["D"] = true, ["E"] = true, ["F"] = true, ["G"] = true
+    },
+    [9] = {
+        ["A"] = true, ["B"] = true, ["C"] = true, ["D"] = true, ["E"] = false, ["F"] = true, ["G"] = true
+    }
+}
+
+function SevenSegmentDisplay:createSegment( x, y, w, h, value, color )
+    local intl_value, intl_color = 0, SevenSegmentDisplay.ColorSchemes.Red
+    if type( value ) == "number" then intl_value = value end; if type( color ) == "table" then intl_color = color end
+
+    local _x, _y = render.getResolution()
+    local segWPct, segHPct = w / segmentSizePercentage, h / segmentSizePercentage
+    local pad = w / segmentSizePercentage 
+    local spacing_pad = 1
+
+    render.setColor( intl_color.BgColor )
+    render.drawRect( x, y, w, h ) 
+
+    local map = segmentMap[intl_value]
+
+    -- A
+    render.setColor(intl_color[map.A])
+    render.drawRect( x + pad + segWPct, y + pad - spacing_pad, w - (2 * segWPct) - (2 * pad), segWPct )
+    -- B
+    render.setColor(intl_color[map.B])
+    render.drawRect( x + (w - pad - segWPct), y + pad + segWPct + spacing_pad, segWPct, (h / 2) - (3 * segWPct) - (3 * spacing_pad) ) 
+    -- C
+    render.setColor(intl_color[map.C])
+    render.drawRect( x + (w - pad - segWPct), y + (h - pad - ((h / 2) - segWPct)) + (2 * spacing_pad), segWPct, (h / 2) - (2 * segWPct) - (3 * spacing_pad))
+    -- D
+    render.setColor(intl_color[map.D])
+    render.drawRect( x + pad + segWPct, y + (h - pad - segWPct) + spacing_pad, w - (2 * pad) - (2 * segWPct), segWPct )
+    -- E
+    render.setColor(intl_color[map.E])
+    render.drawRect( x + pad, y + (h - pad - ((h / 2) - segWPct)) + (2 * spacing_pad), segWPct, (h / 2) - (2 * segWPct) - (3 * spacing_pad) )
+    -- F
+    render.setColor(intl_color[map.F])
+    render.drawRect( x + pad, y + pad + segWPct + spacing_pad, segWPct, (h / 2) - (3 * segWPct) - (3 * spacing_pad) )
+    -- G
+    render.setColor(intl_color[map.G])
+    render.drawRect( x + pad + segWPct, y + pad + ((h / 2) - (2 * segWPct)), w - (2 * segWPct) - (2 * pad), segWPct )
+end
