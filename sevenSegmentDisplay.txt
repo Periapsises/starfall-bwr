@@ -3,6 +3,8 @@
 --@client
 
 SevenSegmentDisplay = {}
+SevenSegmentDisplay.Model = hologram.create( Vector(), Angle(), "models/hunter/blocks/cube025x025x025.mdl", Vector( 1, 1, 1 ) )
+SevenSegmentDisplay.Model:setNoDraw( true )
 
 SevenSegmentDisplay.ColorSchemes = {
     ["Red"] = { 
@@ -23,6 +25,10 @@ SevenSegmentDisplay.ColorSchemes = {
 }
 
 local segmentSizePercentage = 10
+
+render.createRenderTarget( "sevenSegmentDisplayRT" )
+local sevenSegmentDisplayMaterial = material.create( "UnlitGeneric" )
+sevenSegmentDisplayMaterial:setTextureRenderTarget( "$basetexture", "sevenSegmentDisplayRT" )
 
 local segmentMap = {
     [0] = {
@@ -57,6 +63,14 @@ local segmentMap = {
     }
 }
 
+
+-- Creates a single seven segment display cell
+--@param x int | x position of the the top left corner of the bounding box of the cell (0-maxScreenX).
+--@param y int | y position of the top left corner of the bounding box of the cell (0-maxScreenY).
+--@param w int | width of the bounding box of the cell.
+--@param h int | height of the bounding box of the cell.
+--@param value int | the number value to be displayed on the display (0-9)
+--@param color table | the color scheme to draw the cell with, use SevenSegmentDisplay.ColorSchemes 
 function SevenSegmentDisplay:createSegment( x, y, w, h, value, color )
     local intl_value, intl_color = 0, SevenSegmentDisplay.ColorSchemes.Red
     if type( value ) == "number" then intl_value = value end; if type( color ) == "table" then intl_color = color end
@@ -92,4 +106,139 @@ function SevenSegmentDisplay:createSegment( x, y, w, h, value, color )
     -- G
     render.setColor(intl_color[map.G])
     render.drawRect( x + pad + segWPct, y + pad + ((h / 2) - (2 * segWPct)), w - (2 * segWPct) - (2 * pad), segWPct )
+end
+
+-- Formats a number to display on a seven segment display.
+--@param number int | number to be formatted.
+--@param numberOfSegments int | number of segments the number should be formatted to fit.
+function SevenSegmentDisplay:formatNumber( number, numberOfCells )
+    local digits = string.format( "%0" .. numberOfCells .. "d", number )
+
+    local output = {}
+
+    for i = 1, #tostring( digits ) do
+        output[i] = tonumber( string.sub( digits, i, i ) )
+    end
+
+    return output
+end
+
+-- Creates a single seven segment display cell
+--@param x int | x position of the the top left corner of the bounding box of the first cell (0-maxScreenX).
+--@param y int | y position of the top left corner of the bounding box of the first cell (0-maxScreenY).
+--@param w int | width of the bounding box of each cell.
+--@param h int | height of the bounding box of each cell.
+--@param value int | the number value to be displayed on the display (0-9 * numberOfSegments)
+--@param color table | the color scheme to draw the cells with, use SevenSegmentDisplay.ColorSchemes 
+--@param numberOfSegments int | the number of segments to create
+function SevenSegmentDisplay:createMultiSegment( x, y, w, h, value, color, numberOfCells )
+    local intl_value, intl_color = 0, SevenSegmentDisplay.ColorSchemes.Red
+    if type( value ) == "number" then intl_value = value end; if type( color ) == "table" then intl_color = color end
+    
+    local formatNumber = SevenSegmentDisplay:formatNumber( value, numberOfCells )
+
+    for i = 1, numberOfCells do
+        SevenSegmentDisplay:createSegment( x + ((i - 1) * w), y, w, h, formatNumber[i], color )
+    end
+
+end
+
+local segments = {}
+local verts = {}
+
+local renderUVOffsetX = 0
+local renderUVOffsetY = 0
+
+local function generateMesh()
+    local m = mesh.createFromTable( verts )
+    SevenSegmentDisplay.Model:setMesh( m )
+    SevenSegmentDisplay.Model:setMaterial( "!" .. sevenSegmentDisplayMaterial:getName() )
+end
+
+local function populateRenderTarget()
+    local function draw()
+        render.selectRenderTarget( "sevenSegmentDisplayRT" )
+
+        renderUVOffsetX, renderUVOffsetY = 0, 0
+
+        for i, v in pairs( segments ) do
+            if renderUVOffsetX >= 1024 then
+                renderUVOffsetX = 0
+                renderUVOffsetY = renderUVOffsetY + v.h
+            end
+
+            local x = renderUVOffsetX > 0 and renderUVOffsetX + v.w or renderUVOffsetX
+            local y = renderUVOffsetY > 0 and renderUVOffsetY + v.h or renderUVOffsetY
+
+            SevenSegmentDisplay:createSegment( x, y, v.w, v.h, v.value, v.color )
+            v.uv = {
+                ["u1"] = x / 1024,
+                ["v1"] = y / 1024,
+                ["u2"] = ( x + v.w ) / 1024,
+                ["v2"] = ( y + v.h ) / 1024
+            }
+            print( "REAL: " .. x, y, x+v.w, y+v.h )
+            for i, v in pairs(v.uv) do print( "UV: " .. v * 1024 ) end
+            renderUVOffsetX = renderUVOffsetX + v.w
+        end
+
+        render.selectRenderTarget()
+        hook.remove( "renderoffscreen", "cl9_ssd_populate_rendertarget" )
+    end
+
+    hook.add( "renderoffscreen", "cl9_ssd_populate_rendertarget", draw )
+end
+
+-- Creates a single seven segment display cell in 3d space --[[THIS IS BROKEN]]
+--@param position vector3 | the 3d position of the center of the cell.
+--@param angle angle | the 3d orientation of the cell.
+--@param w int | physical width of the cell.
+--@param h int | physical height of the cell.
+--@param value int | the number value to be displayed on the display (0-9).
+--@param color table | the color scheme to draw the cells with, use SevenSegmentDisplay.ColorSchemes 
+function SevenSegmentDisplay:createMeshedSegment( position, angle, w, h, value, color )
+    local intl_value, intl_color = 0, SevenSegmentDisplay.ColorSchemes.Red
+    if type( value ) == "number" then intl_value = value end; if type( color ) == "table" then intl_color = color end
+
+    local segIndex = table.insert( segments, {
+        ["position"] = position,
+        ["angle"] = angle,
+        ["w"] = 1024 / 15,
+        ["h"] = 1024 / 9,
+        ["value"] = intl_value,
+        ["color"] = intl_color,
+        ["uv"] = {}
+    })
+
+
+    local offset1 = Vector( -w / 2, -h / 2, 0 )
+    local offset2 = Vector( w / 2, -h / 2, 0 )
+    local offset3 = Vector( w / 2, h / 2, 0 )
+    local offset4 = Vector( -w / 2, h / 2, 0 )
+
+    offset1:rotate( angle )
+    offset2:rotate( angle )
+    offset3:rotate( angle )
+    offset4:rotate( angle )
+    
+
+    populateRenderTarget()
+    local segmentUVs = segments[segIndex].uv
+
+    local vert1 = { pos = position + offset1 + Vector( 0, 0, 1 ), u = segmentUVs.u1, v = segmentUVs.v1 } -- tl
+    local vert2 = { pos = position + offset2, u = segmentUVs.u2, v = segmentUVs.v1 } -- tr
+    local vert3 = { pos = position + offset3, u = segmentUVs.u2, v = segmentUVs.v2 } -- br
+    local vert4 = { pos = position + offset4, u = segmentUVs.u1, v = segmentUVs.v2 } -- bl
+    
+    table.insert( verts, vert1 ) -- tl
+    table.insert( verts, vert2 ) -- tr
+    table.insert( verts, vert3 ) -- br 
+    table.insert( verts, vert1 )
+    table.insert( verts, vert3 )
+    table.insert( verts, vert4 )
+
+
+
+    generateMesh()
+
 end
