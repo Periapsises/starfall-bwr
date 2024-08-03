@@ -155,32 +155,32 @@ local function initializeTextureUtilities()
 
     render.selectRenderTarget()
 
-    createLabel( Vector( -90.6, 34.8, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmA )
-    createLabel( Vector( -88.8, 36.6, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmB )
-    createLabel( Vector( -87, 38.4, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmC )
-    createLabel( Vector( -85.2, 40.2, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmD )
+    createLabel( Vector( -39.8, 88.3, 65.5 ), Angle( 0, 0, 270 ), 2, 1, srmA )
+    createLabel( Vector( -37.2, 88.3, 65.5 ), Angle( 0, 0, 270 ), 2, 1, srmB )
+    createLabel( Vector( -34.6, 88.3, 65.5 ), Angle( 0, 0, 270 ), 2, 1, srmC )
+    createLabel( Vector( -32, 88.3, 65.5 ), Angle( 0, 0, 270 ), 2, 1, srmD )
 
-    createLabel( Vector( -82.6, 42.8, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmAPeriod )
-    createLabel( Vector( -80.8, 44.6, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmBPeriod )
-    createLabel( Vector( -79, 46.4, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmCPeriod )
-    createLabel( Vector( -77.2, 48.2, 65.5 ), Angle( 0, 45, 270 ), 2, 1, srmDPeriod )
+    createLabel( Vector( -28, 88.3, 65.5 ), Angle( 0, 0, 270 ), 2, 1, srmAPeriod )
+    createLabel( Vector( -25.4, 88.3, 65.5 ), Angle( 0, 0, 270 ), 2, 1, srmBPeriod )
+    createLabel( Vector( -22.8, 88.3, 65.5 ), Angle( 0, 0, 270 ), 2, 1, srmCPeriod )
+    createLabel( Vector( -20.2, 88.3, 65.5 ), Angle( 0, 0, 270 ), 2, 1, srmDPeriod )
 
-    createLabel( Vector( -57.5, 38, 33.1 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, contInsert )
-    createLabel( Vector( -55.8, 39.7, 33.1 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, contWithdraw )
+    createLabel( Vector( -13.8, 67.5, 33.1 ), Angle( 0, 0, 191.2 ), 1.8, 1.8, contInsert )
+    createLabel( Vector( -11.4, 67.5, 33.1 ), Angle( 0, 0, 191.2 ), 1.8, 1.8, contWithdraw )
 
-    createLabel( Vector( -39.7, 55.8, 33.1 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, insert )
-    createLabel( Vector( -38, 57.5, 33.1 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, withdraw )
+    createLabel( Vector( 11.4, 67.5, 33.1 ), Angle( 0, 0, 191.2 ), 1.8, 1.8, insert )
+    createLabel( Vector( 13.8, 67.5, 33.1 ), Angle( 0, 0, 191.2 ), 1.8, 1.8, withdraw )
 
-    createLabel( Vector( -61.5, 42, 34.3 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, test )
-    createLabel( Vector( -59.8, 43.7, 34.3 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, reset )
+    createLabel( Vector( -13.8, 73, 34.2 ), Angle( 0, 0, 191.2 ), 1.8, 1.8, test )
+    createLabel( Vector( -11.4, 73, 34.2 ), Angle( 0, 0, 191.2 ), 1.8, 1.8, reset )
 
-    createLabel( Vector( -63.5, 44, 34.8 ), Angle( 0, 45, 191.2 ), 1.8, 1.8, accTroubleAck )
+    createLabel( Vector( -13.8, 76, 34.8 ), Angle( 0, 0, 191.2 ), 1.8, 1.8, accTroubleAck )
 
-    createLabel( Vector( -88.3, 37.1, 73.2 ), Angle( 0, 45, 270 ), 3, 1, time )
-    createLabel( Vector( -79.7, 45.7, 73.2 ), Angle( 0, 45, 270 ), 3, 1, pressure )
+    createLabel( Vector( -35.7, 88.3, 73.2 ), Angle( 0, 0, 270 ), 3, 1, time )
+    createLabel( Vector( -23.7, 88.3, 73.2 ), Angle( 0, 0, 270 ), 3, 1, pressure )
 
-    createLabel( Vector( -45.7, 79.7, 73.2 ), Angle( 0, 45, 270 ), 3, 1, genMWE )
-    createLabel( Vector( -37.1, 88.3, 73.2 ), Angle( 0, 45, 270 ), 3, 1, reactorThermalPower )
+    createLabel( Vector( 23.5, 88.3, 73.2 ), Angle( 0, 0, 270 ), 3, 1, genMWE )
+    createLabel( Vector( 35.7, 88.3, 73.2 ), Angle( 0, 0, 270 ), 3, 1, reactorThermalPower )
 
     local textureUtilitiesMesh = mesh.createFromTable( verts )
 

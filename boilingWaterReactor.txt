@@ -68,6 +68,7 @@ if CLIENT then
     ControlRodSelection.Model:setScale( Vector( 0.9, 0.9, 0.9 ) )
 
     TextureUtilities.Model:setPos( chip():localToWorld( Vector( 0, 0, 0 ) ) )
+    TextureUtilities.Model:setAngles( chip():localToWorldAngles( Angle( 0, 45, 0 ) ) )
 
     local function drawModels()
         render.setFilterMag( TEXFILTER.POINT )
