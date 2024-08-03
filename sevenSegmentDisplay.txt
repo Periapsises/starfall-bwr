@@ -189,7 +189,7 @@ local function populateRenderTarget()
     hook.add( "renderoffscreen", "cl9_ssd_populate_rendertarget", draw )
 end
 
--- Creates a single seven segment display cell in 3d space --[[THIS IS BROKEN]]
+-- Creates a single seven segment display cell in 3d space --[[THIS IS BROKEN]]--
 --@param position vector3 | the 3d position of the center of the cell.
 --@param angle angle | the 3d orientation of the cell.
 --@param w int | physical width of the cell.
