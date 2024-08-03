@@ -240,5 +240,4 @@ function SevenSegmentDisplay:createMeshedSegment( position, angle, w, h, value, 
 
 
     generateMesh()
-
 end
